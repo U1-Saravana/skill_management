@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+<div class="container">
+  <a href="{{request.META.HTTP_REFERER}}"><img src="https://img.icons8.com/ios-glyphs/50/000000/circled-left-2.png" style="width: 32px; float:left; margin:15px 0px 0px 15px;"/>  </a>
+  <a href="{% url 'logout'%}">  
+    <img src="https://img.icons8.com/material-outlined/24/000000/shutdown.png" style="width:25px; float:right; margin:15px 15px 0 0;"/>
+  </a>
+  
+    <form
+      autocomplete="off"
+      id="form-register"
+      action=""
+      method="POST"
+    >
+      {% csrf_token %}
+      <h2 class="heading">Employee</h2>
+      <div class="input_box">
+        <label for="username">Username</label>
+        {{form.username}}
+      </div>
+     
+      <br style="clear: both" />
+      <div class="input_box">
+        <label for="password">Password</label>
+        {{form.password}}
+      </div>
+      <br style="clear: both" />
+      <div class="input_box">
+        <label for="password">Confirm Password</label>
+        {{form.confirm_password}}
+      </div>
+    
+      <br style="clear: both" />
+
+
+  {% if form.errors %}
+      {% for field in form %}
+        {% if field.errors %}
+          {% for error in field.errors %}
+          <p class="error-msg"> {{ error|escape }}</p>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+{% endif %}
+      <div class="input_box">
+        <input
+          class="btn"
+          style="margin-bottom: 15px"
+          id="btn-add"
+          type="submit"
+          value="Save"
+        />
+      </div>
+    </form>
+  </div>
+
+<script>
+$(document).ready(function () {
+    is_valid = (value) => {
+      if (value && value.trim().length > 0 && value != "") {
+        return true;
+      }
+      return false;
+    };
+
+    default_state = (obj) => {
+      obj.style.border = "1px solid #999";
+    };
+
+    $("#btn-add").click(function () {
+      let is_uname = is_valid($("#username").val());
+      let is_pswd = is_valid($("#password").val());
+      let is_con_pswd = is_valid($("#confirm_pswd").val());
+
+      if (is_uname && is_pswd && is_con_pswd) {
+        $("#form-login").submit();
+      } else {
+        if (!is_uname) {
+          $("#username").css({ border: "2px solid #f50b0b" });
+        }
+        if (!is_pswd) {
+          $("#password").css({ border: "2px solid #f50b0b" });
+        }
+        if (!is_con_pswd) {
+            $("#confirm_pswd").css({ border: "2px solid #f50b0b" });
+          }
+      }
+    });
+  });
+</script>
+{% endblock content %}

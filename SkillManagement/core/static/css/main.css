@@ -1,0 +1,97 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+td{
+   
+text-align:center;
+}
+
+.container{
+    box-shadow: #bfbfbf 1px 0px 15px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.heading, .error-msg{
+    text-align: center;
+}
+
+.error-msg{
+    color: #f50b0b;
+    margin: 0;
+    font-size: 12px;
+}
+
+.input_box{
+    float:left;
+    margin: 15px;
+}
+
+.input_box input, .input_box label, .input_box button{
+    display:block;
+}
+.input_box input{
+    width: 300px;
+    height: 30px;
+}
+.input_box input:focus{
+    border: 2px solid #0a0a0a !important;
+    outline: none;
+}
+
+.data_table{
+    margin: 0 25px;
+    border-collapse: collapse;
+    width: 357px;
+}
+.data_table td, .data_table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+.data_table tr:nth-child(even){background-color: #f2f2f2;}
+.data_table tr:hover {background-color: #ddd;}
+.data_table th {
+    padding: 12px 2px;
+    text-align: left;
+    background-color: #0a0a0a;
+    color: #f3eeee;
+}
+
+.input_box label{
+    font-size: 12px;
+}
+
+.btn{
+    background-color: #0a0a0a;
+    color: #f3eeee;
+    width: 307px !important;
+    height: 40px !important;
+    cursor: pointer;
+    border: none;
+}
+.btn:hover{
+    background-color: #383838;
+}
+
+#btn-save, #btn-update{
+    width: 387px !important;
+}
+#skill_name, #score,#skill_name2, #score2{
+    width: 153px;
+}
+
+a:link {
+    color:black;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:visited {
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+  }

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+
+    <div class="container">
+        <a href="{{request.META.HTTP_REFERER}}"><img src="https://img.icons8.com/ios-glyphs/50/000000/circled-left-2.png" style="width: 32px; float:left; margin:15px 0px 0px 15px;"/>  </a>
+  <a href="{% url 'logout'%}">  
+    <img src="https://img.icons8.com/material-outlined/24/000000/shutdown.png" style="width:25px; float:right; margin:15px 15px 0 0;"/>
+  </a>
+        <h5 class="heading">Skills</h5>
+        <form id="form-employeeSkill-add" action="" method="POST">
+            {%csrf_token%}
+        
+            <div class="input_box" style="margin: 35px 0 0 25px;">
+                <label for="skill_name">Skill name</label>
+                {{form.skill_name}}
+                {{form.skill_name.error}}
+            </div>
+           
+            <div class="input_box" style="margin: 35px 25px 0 5px;">
+                <label for="score">Score</label>
+                <output id="output" for="score" onforminput="value = score.valueAsNumber;" style="float: right; margin-top: 6px; font-size: 10px;"></output>
+                {{form.score}}
+            </div>
+
+            <br style="clear:both;" />
+            <div class="input_box" style="margin-top: 10px;">
+                <input class="btn" id="btn-save"  style="margin-bottom: 5px;" type="button" value="Save">
+            </div>
+        </form>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+        document.getElementById('output').innerHTML = document.getElementById('score').value+"%";
+        document.getElementById('score').addEventListener("input", () => {
+            document.getElementById('output').innerHTML = document.getElementById('score').value+"%";
+        });
+
+        is_valid = (value) =>{
+            if(value && value.trim().length > 0 && value != ""){
+                return true
+            }
+            return false
+        }
+        
+        default_state = (obj) => {obj.style.border="1px solid #999"}
+
+        $('#btn-save').click(function(){
+            let is_skill = is_valid($('#skill_name').val())
+        
+            if(is_skill){
+                $('#form-employeeSkill-add').submit()
+              
+            }else{
+                $('#skill_name').css({"border": "2px solid #f50b0b"})
+            }
+        });
+    });
+    </script>
+{% endblock content %}

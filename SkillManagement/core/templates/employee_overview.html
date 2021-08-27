@@ -1,0 +1,104 @@
+{% extends "base.html" %} {%load static%} {% block content %}
+
+<div class="container">
+    <a href="{{request.META.HTTP_REFERER}}"><img src="https://img.icons8.com/ios-glyphs/50/000000/circled-left-2.png" style="width: 32px; float:left; margin:15px 0px 0px 15px;" /> </a>
+    <a href="{% url 'logout'%}">
+        <img src="https://img.icons8.com/material-outlined/24/000000/shutdown.png" style="width:25px; float:right; margin:15px 15px 0 0;" />
+    </a>
+    <h2 class="heading">Skills</h2>
+
+    <div>
+        {% if skills_list %}
+        <table border="1" class="data_table">
+            <col style="width:35%">
+            <col style="width:40%">
+            <col style="width:25%">
+            <thead>
+                <tr>
+                    <th style="text-align:center">Skills</th>
+                    <th style="text-align:center">Scores</th>
+                    <th style="text-align:center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for skill in skills_list%}
+                <tr>
+                    <td>{{skill.skill_name}}</td>
+                    <td> {{skill.score}}%</td>
+                    <td><a href="{% url 'skills_update' id=skill.id%}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                  <path
+                    d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                </svg></a>
+                        <a href="{% url 'skill_delete' pk=skill.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-x-lg" viewBox="0 0 16 16">
+                  <path
+                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                </svg></a></td>
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+
+        {% else %}
+        <h1 style="text-align:center">No Skills</h1>
+        {% endif %}
+    </div>
+    {% if skills_list %}
+    <div id='container' style="height: 200px;background-color:white"></div>
+    {% endif %}
+    <form action="{%url 'skills_add'%}">
+        <div class="input_box" style="margin-top: 10px;">
+            <input class="btn" id="btn-save" style="margin-bottom: 5px;" type="submit" value="Add new skill">
+        </div>
+    </form>
+</div>
+
+
+{%csrf_token%}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.1.2/echarts.min.js"></script>
+<script>
+    function render(data) {
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+
+        var option;
+        option = {
+            //color: ["#0099c6", "#66aa00", "#b82e2e", "#316395", "#3366cc", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac", "#b77322", "#16d620", "#b91383", "#f4359e", "#9c5935", "#a9c413", "#2a778d", "#668d1c", "#bea413", "#0c5922", "#743411"],
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+                name: 'skills',
+                type: 'pie',
+                radius: '50%',
+                data: data
+
+            }]
+        };
+
+        if (option && typeof option === 'object') {
+            myChart.setOption(option);
+        }
+
+    }
+
+    var token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+    $.ajax({
+        url: window.location.origin + "/chartdata/" + "{{ request.session.emp_id }}/",
+        type: "POST",
+        headers: {
+            'X-CSRFToken': token
+        },
+        success: function(data) {
+            render(data)
+        },
+        error: function(data) {
+            $("#container").remove()
+            console.log(data)
+        }
+    });
+</script>
+{% endblock content%}
